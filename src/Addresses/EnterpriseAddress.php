@@ -11,7 +11,7 @@ use CardanoPHP\Utilities\Credential;
 use CardanoPHP\Utilities\Network;
 
 class EnterpriseAddress extends AbstractAddress {
-	protected $paymentCredential;
+	protected Credential $paymentCredential;
 
 	public const DATA = 'addr';
 

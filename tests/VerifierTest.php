@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
 
 class VerifierTest extends TestCase
 {
-	public function for_test_verify()
+	public function for_test_verify(): array
 	{
 		return [
 			[

@@ -11,7 +11,7 @@ use CardanoPHP\Utilities\Credential;
 use CardanoPHP\Utilities\Network;
 
 class RewardAddress extends AbstractAddress {
-	protected $stakeCredential;
+	protected Credential $stakeCredential;
 
 	public const DATA = 'stake';
 

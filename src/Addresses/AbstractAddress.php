@@ -12,45 +12,45 @@ use function BitWasp\Bech32\convertBits;
 use function BitWasp\Bech32\encode;
 
 abstract class AbstractAddress {
-    private $addressHex = "";
-    private $addressBytes = "";
-    private $addressBech32 = "";
+    private string $addressHex = "";
+    private string $addressBytes = "";
+    private string $addressBech32 = "";
     protected Network $network;
 
-	public const DATA = '';
+    public const DATA = '';
 
     public function __construct(Network $network) {
         $this->network = $network;
     }
 
-    protected function computeBech32($addressBytes) {
-		$unpack = unpack("C*", $addressBytes);
+    protected function computeBech32($addressBytes): string {
+        $unpack = unpack("C*", $addressBytes);
         $words = convertBits(array_values($unpack), count($unpack), 8, 5, true);
         $data = static::DATA . (0 === $this->network->id() ? '_test' : '');
 
         return encode($data, $words);
     }
 
-	abstract protected function maskPayload(): int;
+    abstract protected function maskPayload(): int;
 
-    protected function computeHex($hash) {
+    protected function computeHex($hash): void {
         $payload = $this->maskPayload() | $this->network->id();
         $address = sprintf("%02x", $payload) . $hash;
 
-		$this->addressHex = $address;
+        $this->addressHex = $address;
         $this->addressBytes = hex2bin($address);
         $this->addressBech32 = $this->computeBech32($this->addressBytes);
     }
 
-    public function getHex() {
+    public function getHex(): string {
         return $this->addressHex;
     }
 
-    public function getBytes() {
+    public function getBytes(): string {
         return $this->addressBytes;
     }
 
-    public function getBech32() {
+    public function getBech32(): string {
         return $this->addressBech32;
     }
 }
