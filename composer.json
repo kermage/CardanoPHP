@@ -1,17 +1,21 @@
 {
   "name": "kermage/cardanophp",
+	"license": "GPL-3.0-only",
   "authors": [
     {
       "name": "Gene Alyson Fortunado Torcende",
       "email": "genealyson.torcende@gmail.com"
     }
   ],
+	"minimum-stability": "dev",
+	"prefer-stable": true,
   "config": {
     "allow-plugins": {
       "dealerdirect/phpcodesniffer-composer-installer": true,
       "phpstan/extension-installer": true
     },
     "optimize-autoloader": true,
+		"preferred-install": "dist",
     "sort-packages": true
   },
   "scripts": {
