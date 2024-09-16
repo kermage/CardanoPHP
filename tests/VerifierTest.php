@@ -6,7 +6,7 @@
 
 namespace Tests;
 
-use CardanoDataSignature\Verifier;
+use CardanoPHP\Verifier;
 use PHPUnit\Framework\TestCase;
 
 class VerifierTest extends TestCase

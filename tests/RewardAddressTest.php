@@ -6,10 +6,10 @@
 
 namespace Tests;
 
-use CardanoDataSignature\Addresses\RewardAddress;
-use CardanoDataSignature\Utilities\Credential;
-use CardanoDataSignature\Utilities\HashType;
-use CardanoDataSignature\Utilities\Network;
+use CardanoPHP\Addresses\RewardAddress;
+use CardanoPHP\Utilities\Credential;
+use CardanoPHP\Utilities\HashType;
+use CardanoPHP\Utilities\Network;
 use PHPUnit\Framework\TestCase;
 
 class RewardAddressTest extends TestCase

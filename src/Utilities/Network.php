@@ -4,7 +4,7 @@
  * @package ThemePlate
  */
 
-namespace CardanoDataSignature\Utilities;
+namespace CardanoPHP\Utilities;
 
 enum Network
 {

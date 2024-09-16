@@ -4,9 +4,9 @@
  * @package ThemePlate
  */
 
-namespace CardanoDataSignature\Addresses;
+namespace CardanoPHP\Addresses;
 
-use CardanoDataSignature\Utilities\Network;
+use CardanoPHP\Utilities\Network;
 
 use function BitWasp\Bech32\convertBits;
 use function BitWasp\Bech32\encode;

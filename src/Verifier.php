@@ -4,14 +4,14 @@
  * @package ThemePlate
  */
 
-namespace CardanoDataSignature;
+namespace CardanoPHP;
 
-use CardanoDataSignature\Addresses\EnterpriseAddress;
-use CardanoDataSignature\Addresses\RewardAddress;
-use CardanoDataSignature\Addresses\ShelleyAddress;
-use CardanoDataSignature\Utilities\Credential;
-use CardanoDataSignature\Utilities\HashType;
-use CardanoDataSignature\Utilities\Network;
+use CardanoPHP\Addresses\EnterpriseAddress;
+use CardanoPHP\Addresses\RewardAddress;
+use CardanoPHP\Addresses\ShelleyAddress;
+use CardanoPHP\Utilities\Credential;
+use CardanoPHP\Utilities\HashType;
+use CardanoPHP\Utilities\Network;
 use CBOR\CBOREncoder;
 use CBOR\Types\CBORByteString;
 

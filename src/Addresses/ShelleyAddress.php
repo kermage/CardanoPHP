@@ -4,11 +4,11 @@
  * @package ThemePlate
  */
 
-namespace CardanoDataSignature\Addresses;
+namespace CardanoPHP\Addresses;
 
-use CardanoDataSignature\Utilities\Credential;
-use CardanoDataSignature\Utilities\HashType;
-use CardanoDataSignature\Utilities\Network;
+use CardanoPHP\Utilities\Credential;
+use CardanoPHP\Utilities\HashType;
+use CardanoPHP\Utilities\Network;
 
 class ShelleyAddress extends AbstractAddress {
 	protected Credential $paymentCredential;
