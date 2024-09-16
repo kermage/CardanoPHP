@@ -6,4 +6,6 @@
 
 namespace CardanoPHP\Utilities;
 
-abstract class HashType {}
+abstract class HashType
+{
+}

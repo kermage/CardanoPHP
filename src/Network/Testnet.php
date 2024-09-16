@@ -10,8 +10,8 @@ use CardanoPHP\Utilities\Network;
 
 class Testnet extends Network
 {
-	public function id(): int
-	{
-		return 0;
-	}
+    public function id(): int
+    {
+        return 0;
+    }
 }

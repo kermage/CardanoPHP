@@ -10,27 +10,29 @@ use CardanoPHP\HashType\Script;
 use CardanoPHP\Utilities\Credential;
 use CardanoPHP\Utilities\Network;
 
-class RewardAddress extends AbstractAddress {
-	protected Credential $stakeCredential;
+class RewardAddress extends AbstractAddress
+{
+    protected Credential $stakeCredential;
 
-	public const DATA = 'stake';
+    public const DATA = 'stake';
 
-	public function __construct(Network $network, Credential $stakeCredential) {
-		$this->stakeCredential = $stakeCredential;
+    public function __construct(Network $network, Credential $stakeCredential)
+    {
+        $this->stakeCredential = $stakeCredential;
 
-		parent::__construct($network);
-		$this->computeHex($stakeCredential->getHash());
-	}
+        parent::__construct($network);
+        $this->computeHex($stakeCredential->getHash());
+    }
 
-	protected function maskPayload(): int
-	{
-		$payload = 224;
+    protected function maskPayload(): int
+    {
+        $payload = 224;
 
-		if ($this->stakeCredential->getType() instanceof Script) {
-			$mask = 1 << 4;
-			$payload |= $mask;
-		}
+        if ($this->stakeCredential->getType() instanceof Script) {
+            $mask     = 1 << 4;
+            $payload |= $mask;
+        }
 
-		return $payload;
-	}
+        return $payload;
+    }
 }

@@ -8,5 +8,5 @@ namespace CardanoPHP\Utilities;
 
 abstract class Network
 {
-	abstract public function id(): int;
+    abstract public function id(): int;
 }

@@ -10,8 +10,8 @@ use CardanoPHP\Utilities\Network;
 
 class Mainnet extends Network
 {
-	public function id(): int
-	{
-		return 1;
-	}
+    public function id(): int
+    {
+        return 1;
+    }
 }

@@ -6,20 +6,24 @@
 
 namespace CardanoPHP\Utilities;
 
-class Credential {
-	protected HashType $type;
-	protected string $hash;
+class Credential
+{
+    protected HashType $type;
+    protected string $hash;
 
-	public function __construct(HashType $type, string $hash) {
-		$this->type = $type;
-		$this->hash = $hash;
-	}
+    public function __construct(HashType $type, string $hash)
+    {
+        $this->type = $type;
+        $this->hash = $hash;
+    }
 
-	public function getType(): HashType {
-		return $this->type;
-	}
+    public function getType(): HashType
+    {
+        return $this->type;
+    }
 
-	public function getHash(): string {
-		return $this->hash;
-	}
+    public function getHash(): string
+    {
+        return $this->hash;
+    }
 }
