@@ -6,8 +6,8 @@
 
 namespace CardanoPHP\Addresses;
 
+use CardanoPHP\HashType\Script;
 use CardanoPHP\Utilities\Credential;
-use CardanoPHP\Utilities\HashType;
 use CardanoPHP\Utilities\Network;
 
 class ShelleyAddress extends AbstractAddress {
@@ -21,19 +21,19 @@ class ShelleyAddress extends AbstractAddress {
 		$this->stakeCredential = $stakeCredential;
 
 		parent::__construct($network);
-		$this->computeHex($paymentCredential->hash . $stakeCredential->hash);
+		$this->computeHex($paymentCredential->getHash() . $stakeCredential->getHash());
 	}
 
 	protected function maskPayload(): int
 	{
 		$payload = 0;
 
-		if ($this->paymentCredential->type === HashType::Script) {
+		if ($this->paymentCredential->getType() instanceof Script) {
 			$mask = 1 << 4;
 			$payload |= $mask;
 		}
 
-		if ($this->stakeCredential->type === HashType::Script) {
+		if ($this->stakeCredential->getType() instanceof Script) {
 			$mask = 1 << 5;
 			$payload |= $mask;
 		}

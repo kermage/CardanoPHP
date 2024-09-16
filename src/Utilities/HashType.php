@@ -6,7 +6,4 @@
 
 namespace CardanoPHP\Utilities;
 
-enum HashType {
-	case Address;
-	case Script;
-}
+abstract class HashType {}

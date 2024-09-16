@@ -9,15 +9,23 @@ namespace CardanoPHP;
 use CardanoPHP\Addresses\EnterpriseAddress;
 use CardanoPHP\Addresses\RewardAddress;
 use CardanoPHP\Addresses\ShelleyAddress;
+use CardanoPHP\HashType\Address;
 use CardanoPHP\Utilities\Credential;
-use CardanoPHP\Utilities\HashType;
-use CardanoPHP\Utilities\Network;
+use CardanoPHP\Network\Mainnet;
+use CardanoPHP\Network\Testnet;
 use CBOR\CBOREncoder;
 use CBOR\Types\CBORByteString;
 
 class Verifier
 {
-	public function __construct(protected string $signature, protected string $key) {}
+	protected string $signature;
+	protected string $key;
+
+	public function __construct(string $signature, string $key)
+	{
+		$this->signature = $signature;
+		$this->key = $key;
+	}
 
 	public static function verify(string $signature, string $key, string $message, string $address): bool
 	{
@@ -49,7 +57,7 @@ class Verifier
 		);
 	}
 
-	protected function hasExpected(string $message): int | false
+	protected function hasExpected(string $message): bool
 	{
 		$hexMessage = bin2hex($message);
 		$index = strpos($this->signature, $hexMessage);
@@ -109,9 +117,9 @@ class Verifier
 			return false;
 		}
 
-		$network = false === strpos($providedAddress, 'test') ? Network::Mainnet : Network::Testnet;
+		$network = false === strpos($providedAddress, 'test') ? new Mainnet() : new Testnet();
 		$credential = new Credential(
-			HashType::Address,
+			new Address(),
 			substr($hexAddress, 2, 56)
 		);
 
@@ -123,7 +131,7 @@ class Verifier
 					$network,
 					$credential,
 					new Credential(
-						HashType::Address,
+						new Address(),
 						substr($hexAddress, 2+56)
 					),
 				);
@@ -158,7 +166,7 @@ class Verifier
 		);
 	}
 
-	protected function isCoseSign1(mixed $data): bool
+	protected function isCoseSign1($data): bool
 	{
 		if (!is_array($data) || 4 !== count($data)) {
 			return false;
@@ -189,7 +197,7 @@ class Verifier
 		return true;
 	}
 
-	protected function handledHeader(mixed $value): bool
+	protected function handledHeader($value): bool
 	{
 		if (!is_array($value) || 2 !== count($value)) {
 			return false;
@@ -210,7 +218,7 @@ class Verifier
 		return true;
 	}
 
-	protected function validKeyPair(mixed $data): bool
+	protected function validKeyPair($data): bool
 	{
 		if (!is_array($data) || 4 !== count($data)) {
 			return false;
