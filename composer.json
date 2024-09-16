@@ -27,8 +27,7 @@
   "require": {
     "php": "^7.4|^8.2",
     "ext-sodium": "*",
-    "2tvenom/cborencode": "^1.0",
-    "bitwasp/bech32": "^0.0.1"
+    "2tvenom/cborencode": "^1.0"
   },
   "require-dev": {
     "themeplate/tester": "^2.2"

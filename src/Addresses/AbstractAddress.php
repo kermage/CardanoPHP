@@ -6,10 +6,8 @@
 
 namespace CardanoPHP\Addresses;
 
+use CardanoPHP\Utilities\Bech32;
 use CardanoPHP\Utilities\Network;
-
-use function BitWasp\Bech32\convertBits;
-use function BitWasp\Bech32\encode;
 
 abstract class AbstractAddress
 {
@@ -28,10 +26,10 @@ abstract class AbstractAddress
     protected function computeBech32($addressBytes): string
     {
         $unpack = unpack('C*', $addressBytes);
-        $words  = convertBits(array_values($unpack), count($unpack), 8, 5);
+        $words  = Bech32::toWords(array_values($unpack));
         $data   = static::DATA . ( 0 === $this->network->id() ? '_test' : '' );
 
-        return encode($data, $words);
+        return Bech32::encode($data, $words, 1000);
     }
 
     abstract protected function maskPayload(): int;
