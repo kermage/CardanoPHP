@@ -25,7 +25,7 @@ abstract class AbstractAddress {
 
     protected function computeBech32($addressBytes): string {
         $unpack = unpack("C*", $addressBytes);
-        $words = convertBits(array_values($unpack), count($unpack), 8, 5, true);
+        $words = convertBits(array_values($unpack), count($unpack), 8, 5);
         $data = static::DATA . (0 === $this->network->id() ? '_test' : '');
 
         return encode($data, $words);
