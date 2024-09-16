@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<phpunit
+	cacheResultFile=".cache/.phpunit.result.cache"
+	backupGlobals="false"
+	colors="true"
+	convertErrorsToExceptions="true"
+	convertNoticesToExceptions="true"
+	convertWarningsToExceptions="true"
+>
+	<testsuites>
+		<testsuite name="unit">
+			<directory suffix="Test.php">./tests/</directory>
+		</testsuite>
+	</testsuites>
+
+	<coverage>
+		<include>
+			<directory suffix=".php">./src/</directory>
+		</include>
+	</coverage>
+</phpunit>
