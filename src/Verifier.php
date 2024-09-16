@@ -148,6 +148,10 @@ class Verifier
 			);
 		}
 
+		if (empty($decodedAddress)) {
+			return false;
+		}
+
 		if ($decodedAddress->getBech32() !== $providedAddress) {
 			return false;
 		}
