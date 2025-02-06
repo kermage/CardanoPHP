@@ -19,6 +19,7 @@
     "sort-packages": true
   },
   "scripts": {
+    "phpstan": "phpstan analyse --memory-limit=1G",
     "analyse": "themeplate analyse",
     "lint": "themeplate lint",
     "fix": "themeplate fix",

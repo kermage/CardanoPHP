@@ -169,6 +169,11 @@ class Verifier
         );
     }
 
+    /**
+     * @param mixed[] $data
+     *
+     * @return bool
+     */
     protected function isCoseSign1($data): bool
     {
         if (! is_array($data) || 4 !== count($data)) {
@@ -200,6 +205,11 @@ class Verifier
         return true;
     }
 
+    /**
+     * @param mixed[] $value
+     *
+     * @return bool
+     */
     protected function handledHeader($value): bool
     {
         if (! is_array($value) || 2 > count($value)) {
@@ -221,6 +231,11 @@ class Verifier
         return true;
     }
 
+    /**
+     * @param mixed[] $data
+     *
+     * @return bool
+     */
     protected function validKeyPair($data): bool
     {
         if (! is_array($data) || 4 > count($data)) {

@@ -36,7 +36,16 @@ class Bech32
         return $chk;
     }
 
-    public static function convert(array $data, int $inBits, int $outBits, bool $pad = true)
+    /**
+     * @param mixed[] $data
+     * @param int $inBits
+     * @param int $outBits
+     * @param bool $pad
+     *
+     * @return mixed[]
+     * @throws Exception
+     */
+    public static function convert(array $data, int $inBits, int $outBits, bool $pad = true): array
     {
         $value = 0;
         $bits = 0;
@@ -69,11 +78,25 @@ class Bech32
         return $result;
     }
 
+    /**
+     * @param mixed[] $bytes
+     *
+     * @return mixed[]
+     * @throws Exception
+     */
     public static function toWords(array $bytes): array
     {
         return self::convert($bytes, 8, 5, true);
     }
 
+    /**
+     * @param string $prefix
+     * @param mixed[] $words
+     * @param int $LIMIT
+     *
+     * @return string
+     * @throws Exception
+     */
     public static function encode(string $prefix, array $words, int $LIMIT = 90)
     {
         if (strlen($prefix) + 7 + count($words) > $LIMIT) {
