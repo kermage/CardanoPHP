@@ -23,10 +23,16 @@ abstract class AbstractAddress
         $this->network = $network;
     }
 
+    /**
+     * @param string $addressBytes
+     *
+     * @return string
+     * @throws \Exception
+     */
     protected function computeBech32($addressBytes): string
     {
         $unpack = unpack('C*', $addressBytes);
-        $words  = Bech32::toWords(array_values($unpack));
+        $words  = Bech32::toWords(array_values($unpack ?: []));
         $data   = static::DATA . ( 0 === $this->network->id() ? '_test' : '' );
 
         return Bech32::encode($data, $words, 1000);
@@ -34,13 +40,19 @@ abstract class AbstractAddress
 
     abstract protected function maskPayload(): int;
 
+    /**
+     * @param string $hash
+     *
+     * @return void
+     * @throws \Exception
+     */
     protected function computeHex($hash): void
     {
         $payload = $this->maskPayload() | $this->network->id();
         $address = sprintf('%02x', $payload) . $hash;
 
         $this->addressHex    = $address;
-        $this->addressBytes  = hex2bin($address);
+        $this->addressBytes  = (string) hex2bin($address);
         $this->addressBech32 = $this->computeBech32($this->addressBytes);
     }
 
