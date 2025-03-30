@@ -25,6 +25,7 @@ abstract class AbstractAddress
         $this->network = $network;
     }
 
+    /** @throws Exception */
     protected function computeBech32($addressBytes): string
     {
         $unpack = unpack('C*', $addressBytes);
@@ -36,6 +37,7 @@ abstract class AbstractAddress
 
     abstract protected function maskPayload(): int;
 
+    /** @throws Exception */
     protected function computeHex($hash): void
     {
         $payload = $this->maskPayload() | $this->network->id();
