@@ -14,7 +14,7 @@ use PHPUnit\Framework\TestCase;
 
 class EnterpriseAddressTest extends TestCase
 {
-    public function testAddress()
+    public function testAddress(): void
     {
         $address = new EnterpriseAddress(
             new Mainnet(),

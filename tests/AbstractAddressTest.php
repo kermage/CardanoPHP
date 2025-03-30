@@ -12,6 +12,7 @@ use PHPUnit\Framework\TestCase;
 
 class AbstractAddressTest extends TestCase
 {
+    /** @return array<int, array<int, string>> */
     public function forTestInvalidHash(): array
     {
         return [

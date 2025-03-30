@@ -11,6 +11,7 @@ use PHPUnit\Framework\TestCase;
 
 class VerifierTest extends TestCase
 {
+    /** @return array<int, array<int, string>> */
     public function forTestVerify(): array
     {
         // phpcs:disable Generic.Files.LineLength.TooLong
@@ -58,7 +59,7 @@ class VerifierTest extends TestCase
     /**
      * @dataProvider forTestVerify
      */
-    public function testVerify(string $signature, string $key, string $message, string $address)
+    public function testVerify(string $signature, string $key, string $message, string $address): void
     {
         $this->assertTrue(Verifier::verify($signature, $key, $message, $address));
     }

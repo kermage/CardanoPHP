@@ -26,7 +26,7 @@ abstract class AbstractAddress
     }
 
     /** @throws Exception */
-    protected function computeBech32($addressBytes): string
+    protected function computeBech32(string $addressBytes): string
     {
         $unpack = unpack('C*', $addressBytes);
         $words  = Bech32::toWords(array_values($unpack));
@@ -38,7 +38,7 @@ abstract class AbstractAddress
     abstract protected function maskPayload(): int;
 
     /** @throws Exception */
-    protected function computeHex($hash): void
+    protected function computeHex(string $hash): void
     {
         $payload = $this->maskPayload() | $this->network->id();
         $address = sprintf('%02x', $payload) . $hash;

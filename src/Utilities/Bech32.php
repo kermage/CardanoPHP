@@ -36,8 +36,12 @@ class Bech32
         return $chk;
     }
 
-    /** @throws Exception */
-    public static function convert(array $data, int $inBits, int $outBits, bool $pad = true)
+    /**
+     * @param int[] $data
+     * @return int[]
+     * @throws Exception
+     */
+    public static function convert(array $data, int $inBits, int $outBits, bool $pad = true): array
     {
         $value = 0;
         $bits = 0;
@@ -70,14 +74,21 @@ class Bech32
         return $result;
     }
 
-    /** @throws Exception */
+    /**
+     * @param int[] $bytes
+     * @return int[]
+     * @throws Exception
+     */
     public static function toWords(array $bytes): array
     {
         return self::convert($bytes, 8, 5, true);
     }
 
-    /** @throws Exception */
-    public static function encode(string $prefix, array $words, int $LIMIT = 90)
+    /**
+     * @param int[] $words
+     * @throws Exception
+     */
+    public static function encode(string $prefix, array $words, int $LIMIT = 90): string
     {
         if (strlen($prefix) + 7 + count($words) > $LIMIT) {
             throw new Exception('Exceeds length limit');
