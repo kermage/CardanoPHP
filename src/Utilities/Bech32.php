@@ -29,10 +29,12 @@ class Bech32
         foreach (str_split($prefix) as $char) {
             $chk = self::polymodStep($chk) ^ (ord($char) >> 5);
         }
+
         $chk = self::polymodStep($chk);
         foreach (str_split($prefix) as $char) {
             $chk = self::polymodStep($chk) ^ (ord($char) & 0x1f);
         }
+
         return $chk;
     }
 
@@ -66,7 +68,8 @@ class Bech32
             if ($bits >= $inBits) {
                 throw new Exception('Excess padding');
             }
-            if (($value << ($outBits - $bits)) & $maxV) {
+
+            if (0 !== (($value << ($outBits - $bits)) & $maxV)) {
                 throw new Exception('Non-zero padding');
             }
         }
@@ -103,6 +106,7 @@ class Bech32
             if ($x >> 5 !== 0) {
                 throw new Exception('Non 5-bit word');
             }
+
             $chk = self::polymodStep($chk) ^ $x;
             $result .= self::ALPHABET[$x];
         }
@@ -110,6 +114,7 @@ class Bech32
         for ($i = 0; $i < 6; ++$i) {
             $chk = self::polymodStep($chk);
         }
+
         $chk ^= 1;
 
         for ($i = 0; $i < 6; ++$i) {

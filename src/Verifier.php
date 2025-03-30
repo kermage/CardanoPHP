@@ -70,12 +70,7 @@ class Verifier
         }
 
         $last = substr($this->signature, $index);
-
-        if (strlen($last) !== strlen($hexMessage) + 132) {
-            return false;
-        }
-
-        return true;
+        return strlen($last) === strlen($hexMessage) + 132;
     }
 
     protected function correctCBOR(string $message, string $providedAddress): bool
@@ -214,7 +209,7 @@ class Verifier
             return false;
         }
 
-        if (empty($value[1] || empty($value['address']))) {
+        if (false === ($value[1] || empty($value['address']))) {
             return false;
         }
 
