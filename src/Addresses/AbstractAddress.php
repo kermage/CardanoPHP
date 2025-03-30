@@ -8,6 +8,8 @@ namespace CardanoPHP\Addresses;
 
 use CardanoPHP\Utilities\Bech32;
 use CardanoPHP\Utilities\Network;
+use ErrorException;
+use Exception;
 
 abstract class AbstractAddress
 {
@@ -38,9 +40,27 @@ abstract class AbstractAddress
     {
         $payload = $this->maskPayload() | $this->network->id();
         $address = sprintf('%02x', $payload) . $hash;
+        $binary  = false;
+        $message = '';
+
+        set_error_handler(function ($errno, $errstr, $errfile, $errline) {
+            throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
+        }, E_WARNING);
+
+        try {
+            $binary = hex2bin($address);
+        } catch (Exception $e) {
+            $message = $e->getMessage();
+        }
+
+        restore_error_handler();
+
+        if (false === $binary) {
+            throw new Exception($message);
+        }
 
         $this->addressHex    = $address;
-        $this->addressBytes  = hex2bin($address);
+        $this->addressBytes  = $binary;
         $this->addressBech32 = $this->computeBech32($this->addressBytes);
     }
 
