@@ -162,9 +162,15 @@ class Verifier
             $signatureData[2],
         );
 
+        $encodedSigStructure = CBOREncoder::encode($sigStructure);
+
+        if (null === $encodedSigStructure) {
+            return false;
+        }
+
         return sodium_crypto_sign_verify_detached(
             $signatureData[3]->get_byte_string(),
-            CBOREncoder::encode($sigStructure),
+            $encodedSigStructure,
             $publicKey
         );
     }
