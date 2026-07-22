@@ -56,11 +56,38 @@ class VerifierTest extends TestCase
         // phpcs:enable
     }
 
+    /** @return array<int, array<int, string>> */
+    public function forTestAuthenticate(): array
+    {
+        $expected = [
+            'stake1uyvfslqkzgrf6syq5r4jg7pqewv8l65phh024lw5r7vk9qgznhyty',
+            'stake_test1ur880e7p4ew25hyt2fwc63t72c6msjtf6jrctvg89ggtjyq2szg8x',
+            'addr1v9ux8dwy800s5pnq327g9uzh8f2fw98ldytxqaxumh3e8kqumfr6d',
+            'stake1ux49kakpy9470fdp02k07dxxynym9yw85j5hrqhszen9jyc2swy42',
+            'stake_test1upjkgp6r2ee8e560nsfdpvgnu73k902yfezzk23ttzc0efc6lajge',
+            'stake_test1uzzce7pze9t0jvlvfgj2f4d9m395whqy6k0q9cgkscpgumqjkh3v6',
+        ];
+
+        return array_map(
+            static fn (array $row, string $address): array => array_merge($row, [$address]),
+            $this->forTestVerify(),
+            $expected
+        );
+    }
+
     /**
      * @dataProvider forTestVerify
      */
     public function testVerify(string $signature, string $key, string $message, string $address): void
     {
         $this->assertTrue(Verifier::verify($signature, $key, $message, $address));
+    }
+
+    /**
+     * @dataProvider forTestAuthenticate
+    */
+    public function testAuthenticate(string $signature, string $key, string $message, string $address, string $expected): void
+    {
+        $this->assertSame($expected, Verifier::authenticate($signature, $key, $message, $address));
     }
 }

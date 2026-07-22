@@ -29,18 +29,33 @@ class Verifier
 
     public static function verify(string $signature, string $key, string $message, string $address): bool
     {
+        return null !== self::authenticate($signature, $key, $message, $address);
+    }
+
+    /**
+     * Verify a wallet data-signature and, on success, return an address
+     * DERIVED from the signed wallet address. For base (Shelley) addresses
+     * this is the stake (reward) address; for enterprise addresses it is
+     * the enterprise address itself. Callers should use this return value
+     * as the account identity: it is bound to the signed payload, unlike
+     * any address posted alongside the signature.
+     *
+     * @return string|null Bech32 address on success, null on failure.
+     */
+    public static function authenticate(string $signature, string $key, string $message, string $address): ?string
+    {
         if ('' === $signature || '' === $key || '' === $message || '' === $address) {
-            return false;
+            return null;
         }
 
         $verifier = new self($signature, $key);
 
         if (! $verifier->isAddress($address)) {
-            return false;
+            return null;
         }
 
         if (! $verifier->hasExpected($message)) {
-            return false;
+            return null;
         }
 
         return $verifier->correctCBOR($message, $address);
@@ -73,33 +88,33 @@ class Verifier
         return strlen($last) === strlen($hexMessage) + 132;
     }
 
-    protected function correctCBOR(string $message, string $providedAddress): bool
+    protected function correctCBOR(string $message, string $providedAddress): ?string
     {
         $cborSignature = hex2bin($this->signature);
         $signatureData = CBOREncoder::decode($cborSignature);
 
         if (! $this->isCoseSign1($signatureData)) {
-            return false;
+            return null;
         }
 
         $protectedHeader        = $signatureData[0]->get_byte_string();
         $decodedProtectedHeader = CBOREncoder::decode($protectedHeader);
 
         if (! $this->handledHeader($decodedProtectedHeader)) {
-            return false;
+            return null;
         }
 
         $payload = $signatureData[2]->get_byte_string();
 
         if ($payload !== $message) {
-            return false;
+            return null;
         }
 
         $cborKey = hex2bin($this->key);
         $keyData = CBOREncoder::decode($cborKey);
 
         if (! $this->validKeyPair($keyData)) {
-            return false;
+            return null;
         }
 
         $protectedAddress = $decodedProtectedHeader['address']->get_byte_string();
@@ -108,7 +123,7 @@ class Verifier
         $hexAddress       = bin2hex($protectedAddress);
 
         if (false === strpos($hexAddress, bin2hex($credentialHash))) {
-            return false;
+            return null;
         }
 
         $network    = false === strpos($providedAddress, 'test') ? new Mainnet() : new Testnet();
@@ -117,37 +132,44 @@ class Verifier
             substr($hexAddress, 2, 56)
         );
 
+        $derivedAddress = null;
+        $decodedAddress = null;
+
         if (0 === strpos($providedAddress, 'addr')) {
             $stakeCredentialHash = substr($hexAddress, 2 + 56);
 
             if ($stakeCredentialHash) {
-                $decodedAddress = new ShelleyAddress(
+                $stakeCredential = new Credential(
+                    new Address(),
+                    $stakeCredentialHash
+                );
+                $decodedAddress  = new ShelleyAddress(
                     $network,
                     $credential,
-                    new Credential(
-                        new Address(),
-                        substr($hexAddress, 2 + 56)
-                    ),
+                    $stakeCredential
                 );
+                $derivedAddress  = (new RewardAddress($network, $stakeCredential))->getBech32();
             } else {
                 $decodedAddress = new EnterpriseAddress(
                     $network,
                     $credential
                 );
+                $derivedAddress = $decodedAddress->getBech32();
             }
         } elseif (0 === strpos($providedAddress, 'stake')) {
             $decodedAddress = new RewardAddress(
                 $network,
                 $credential
             );
+            $derivedAddress = $decodedAddress->getBech32();
         }
 
         if (empty($decodedAddress)) {
-            return false;
+            return null;
         }
 
         if ($decodedAddress->getBech32() !== $providedAddress) {
-            return false;
+            return null;
         }
 
         $sigStructure = array(
@@ -160,14 +182,16 @@ class Verifier
         $encodedSigStructure = CBOREncoder::encode($sigStructure);
 
         if (null === $encodedSigStructure) {
-            return false;
+            return null;
         }
 
-        return sodium_crypto_sign_verify_detached(
+        $verified = sodium_crypto_sign_verify_detached(
             $signatureData[3]->get_byte_string(),
             $encodedSigStructure,
             $publicKey
         );
+
+        return $verified ? $derivedAddress : null;
     }
 
     /** @param mixed $data */
