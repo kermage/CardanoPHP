@@ -1,0 +1,11 @@
+description=$(sed '/^#/d' "$1" | grep -m1 '[^[:space:]]' || true)
+types='build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test'
+scope='\([a-zA-Z0-9][a-zA-Z0-9/_-]*\)'
+pattern="^(${types})(${scope})?!?: .*[^[:space:]].*"
+
+if ! printf '%s\n' "$description" | grep -qE "$pattern"; then
+	echo >&2 "Commit message: $(printf '%s' "$description" | tr -d '[:cntrl:]')"
+	echo >&2 "Valid format:   <type>[(<scope>)][!]: <description>"
+	echo >&2 "Allowed types:  $(printf '%s\n' "$types" | tr '|' ' ')"
+	exit 1
+fi
